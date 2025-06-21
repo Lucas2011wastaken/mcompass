@@ -115,10 +115,25 @@ void dispatcher(void *handler_arg, esp_event_base_t base, int32_t id,
       // ESP_LOGI(TAG, "set south color to 0x%x",
       // context.getColor().southColor);
       pixel::setPointerColor(context.getColor().southColor);
-      pixel::showByAzimuth(360 - evt->azimuth.angle + 90);
+      float final_angle = 360 - evt->azimuth.angle + 90;
+      // 标准化到 0-359 度
+      if (final_angle < 0) {
+        final_angle += 360;
+      }
+      if (final_angle >= 360) {
+        final_angle -= 360;
+      }
+      pixel::showByAzimuth(final_angle);
     } else if (context.getWorkType() == WorkType::SPAWN) {
       pixel::setPointerColor(context.getColor().southColor);
-      pixel::showByAzimuth(360 - evt->azimuth.angle - 90);
+      float final_angle = 360 - evt->azimuth.angle + 90;
+      if (final_angle < 0) {
+        final_angle += 360;
+      }
+      if (final_angle >= 360) {
+        final_angle -= 360;
+      }
+      pixel::showByAzimuth(final_angle);
       }
     last_update = millis();
   } break;
