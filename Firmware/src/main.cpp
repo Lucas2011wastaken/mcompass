@@ -48,7 +48,7 @@ void dispatcher(void *handler_arg, esp_event_base_t base, int32_t id,
     switch (deviceState) {
     // COMPASS模式下响应长按事件
     case State::COMPASS: {
-      // 出生针模式下， 模式下， 长按切换数据源
+      // 出生针模式下，长按切换数据源
       if (workType == WorkType::SPAWN) {
         if (context.getSubscribeSource() == Event::Source::SENSOR) {
           context.setSubscribeSource(Event::Source::NETHER);
@@ -126,7 +126,7 @@ void dispatcher(void *handler_arg, esp_event_base_t base, int32_t id,
       pixel::showByAzimuth(final_angle);
     } else if (context.getWorkType() == WorkType::SPAWN) {
       pixel::setPointerColor(context.getColor().southColor);
-      float final_angle = 360 - evt->azimuth.angle + 90;
+      float final_angle = 360 - evt->azimuth.angle - 90;
       if (final_angle < 0) {
         final_angle += 360;
       }
