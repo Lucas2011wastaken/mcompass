@@ -2,6 +2,13 @@
 - [English](README.md)
 - [中文](README.zh-CN.md)
 
+Alright this is the modified ver. for LITE and QMC5883P
+
+Here is the change log:
+1. THERE WILL BE NO LONGER GPS MODE
+2. YOU CAN SWICH MODES BETWEEN NORTH AND SOUTH
+3. CHANGE THE VER. CODE
+4. CHANGE THE ACTIONS
 
 ## Video Introduction 
 * [Youtube](https://www.youtube.com/watch?v=OetinqewrzU)
