@@ -125,7 +125,7 @@ void dispatcher(void *handler_arg, esp_event_base_t base, int32_t id,
       }
       pixel::showByAzimuth(final_angle);
     } else if (context.getWorkType() == WorkType::SPAWN) {
-      pixel::setPointerColor(context.getColor().southColor);
+      pixel::setPointerColor(context.getColor().spawnColor);
       float final_angle = 360 - evt->azimuth.angle - 90;
       if (final_angle < 0) {
         final_angle += 360;
