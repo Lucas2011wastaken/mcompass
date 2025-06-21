@@ -2,7 +2,7 @@ Import("env")
 import os
 import subprocess
 
-firmware_version = "1.1.0"
+firmware_version = "alpha-0.0.1"
 
 def get_git_info():
     try:

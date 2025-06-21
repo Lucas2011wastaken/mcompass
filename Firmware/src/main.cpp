@@ -48,18 +48,15 @@ void dispatcher(void *handler_arg, esp_event_base_t base, int32_t id,
     switch (deviceState) {
     // COMPASS模式下响应长按事件
     case State::COMPASS: {
-      // 出生针模式下， 长按设置新的出生点
+      // 出生针模式下， 模式下， 长按切换数据源
       if (workType == WorkType::SPAWN) {
-        // 检查GPS坐标是否有效
-        if (gps::isValidGPSLocation(currentLoc)) {
-          preference::saveSpawnLocation(currentLoc);
-          context.setSpawnLocation(currentLoc);
-          ESP_LOGI(TAG, "Set spawn location to {%.2f,%.2f}",
-                   currentLoc.latitude, currentLoc.longitude);
-        } else {
-          ESP_LOGW(TAG, "Can't set spawn location, invalid GPS data.");
-        }
-      } else if (workType == WorkType::SOUTH) {
+        if (context.getSubscribeSource() == Event::Source::SENSOR) {
+          context.setSubscribeSource(Event::Source::NETHER);
+          ESP_LOGI(TAG, "Switch Data Source to NETHER");
+        } else if (context.getSubscribeSource() == Event::Source::NETHER) {
+          context.setSubscribeSource(Event::Source::SENSOR);
+          ESP_LOGI(TAG, "Switch Data Source to SENSOR");
+        }{
         // 指南针模式下， 长按切换数据源
         if (context.getSubscribeSource() == Event::Source::SENSOR) {
           context.setSubscribeSource(Event::Source::NETHER);
@@ -116,25 +113,10 @@ void dispatcher(void *handler_arg, esp_event_base_t base, int32_t id,
       // ESP_LOGI(TAG, "set south color to 0x%x",
       // context.getColor().southColor);
       pixel::setPointerColor(context.getColor().southColor);
-      pixel::showByAzimuth(360 - evt->azimuth.angle);
+      pixel::showByAzimuth(360 - evt->azimuth.angle + 90);
     } else if (context.getWorkType() == WorkType::SPAWN) {
-      // ESP_LOGI(TAG, "set spawn color to 0x%x",
-      // context.getColor().spawnColor);
-      pixel::setPointerColor(context.getColor().spawnColor);
-      // 如果当前位置无效, 则只会显示来自数据源Nether的方位角
-      if (!gps::isValidGPSLocation(context.getCurrentLocation()) &&
-          evt->source == Event::Source::NETHER) {
-        pixel::showByAzimuth(evt->azimuth.angle);
-      } else {
-        // 如果当前位置有效, 则显示当前位置的方位角, 计算方位角
-        pixel::showFrameByLocation(context.getSpawnLocation().latitude,
-                                   context.getSpawnLocation().longitude,
-                                   context.getCurrentLocation().latitude,
-                                   context.getCurrentLocation().longitude,
-                                   evt->azimuth.angle);
-      }
-    }
-    last_update = millis();
+      pixel::setPointerColor(context.getColor().southColor);
+      pixel::showByAzimuth(360 - evt->azimuth.angle - 90);
   } break;
   case Event::Type::TEXT: { // 状态校验, 非INFO状态,忽略TEXT
     if (context.getDeviceState() != State::INFO)
