@@ -56,7 +56,9 @@ void dispatcher(void *handler_arg, esp_event_base_t base, int32_t id,
         } else if (context.getSubscribeSource() == Event::Source::NETHER) {
           context.setSubscribeSource(Event::Source::SENSOR);
           ESP_LOGI(TAG, "Switch Data Source to SENSOR");
-        }{
+        }
+      }
+         else if (workType == WorkType::SOUTH) {
         // 指南针模式下， 长按切换数据源
         if (context.getSubscribeSource() == Event::Source::SENSOR) {
           context.setSubscribeSource(Event::Source::NETHER);
@@ -117,6 +119,8 @@ void dispatcher(void *handler_arg, esp_event_base_t base, int32_t id,
     } else if (context.getWorkType() == WorkType::SPAWN) {
       pixel::setPointerColor(context.getColor().southColor);
       pixel::showByAzimuth(360 - evt->azimuth.angle - 90);
+      }
+    last_update = millis();
   } break;
   case Event::Type::TEXT: { // 状态校验, 非INFO状态,忽略TEXT
     if (context.getDeviceState() != State::INFO)
