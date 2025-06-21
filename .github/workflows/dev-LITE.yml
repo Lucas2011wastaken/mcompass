@@ -1,9 +1,9 @@
-name: Build Firmware Workflow on develop
+name: Build Firmware Workflow on dev-LITE
 
 on:
   push:
     branches:
-      - develop
+      - dev-LITE
 
 jobs:
   build:
